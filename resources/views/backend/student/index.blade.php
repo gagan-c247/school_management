@@ -1,142 +1,51 @@
-@extends('backend.backend')
-
+@extends('backend.backend',['title'=>'Student |  view all students'])
 
 @section('content')
 <div class="row">
     <div class="col-md-12">
-      <div class="card card-plain">
-        <div class="card-header card-header-primary">
-          <h4 class="card-title mt-0"> Table on Plain Background</h4>
-          <p class="card-category"> Here is a subtitle for this table</p>
-        </div>
-        <div class="card-body">
-          <div class="table-responsive">
-            <table class="table table-hover">
-              <thead class="">
-                <tr><th>
-                  ID
-                </th>
-                <th>
-                  Name
-                </th>
-                <th>
-                  Country
-                </th>
-                <th>
-                  City
-                </th>
-                <th>
-                  Salary
-                </th>
-              </tr></thead>
-              <tbody>
-                <tr>
-                  <td>
-                    1
-                  </td>
-                  <td>
-                    Dakota Rice
-                  </td>
-                  <td>
-                    Niger
-                  </td>
-                  <td>
-                    Oud-Turnhout
-                  </td>
-                  <td>
-                    $36,738
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    2
-                  </td>
-                  <td>
-                    Minerva Hooper
-                  </td>
-                  <td>
-                    Curaçao
-                  </td>
-                  <td>
-                    Sinaai-Waas
-                  </td>
-                  <td>
-                    $23,789
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    3
-                  </td>
-                  <td>
-                    Sage Rodriguez
-                  </td>
-                  <td>
-                    Netherlands
-                  </td>
-                  <td>
-                    Baileux
-                  </td>
-                  <td>
-                    $56,142
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    4
-                  </td>
-                  <td>
-                    Philip Chaney
-                  </td>
-                  <td>
-                    Korea, South
-                  </td>
-                  <td>
-                    Overland Park
-                  </td>
-                  <td>
-                    $38,735
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    5
-                  </td>
-                  <td>
-                    Doris Greene
-                  </td>
-                  <td>
-                    Malawi
-                  </td>
-                  <td>
-                    Feldkirchen in Kärnten
-                  </td>
-                  <td>
-                    $63,542
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    6
-                  </td>
-                  <td>
-                    Mason Porter
-                  </td>
-                  <td>
-                    Chile
-                  </td>
-                  <td>
-                    Gloucester
-                  </td>
-                  <td>
-                    $78,615
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+        <div class="card card-plain"> 
+          <div class="card-header card-header-primary">
+            <h4 class="card-title mt-0">Student Table
+            <p class="card-category"> View All Student Details</p>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table table-hover">
+                <thead class="">
+                  <tr>
+                    <th>ID</th>
+                    <th>Student Name</th>
+                    <th>Class</th>
+                    <th>Created At</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @forelse ($students as $student)
+                    <tr>
+                      <td> {{'#'.$student->id ?? '-'}}</td>
+                      <td> {{$student->name ?? '-'}} </td>
+                      <td> {{$student->studentclass->name ?? '-'}} </td>
+                      <td> {{$student->created_at->format('d M Y, H:i A') ?? '-'}} </td>
+                      <td>  
+                          <a href="{{route('admin.student.edit',$student->id)}}"><i class="material-icons">edit</i></a>  
+                          <a href=""><i class="material-icons">delete</i></a>  
+                      </td>
+                    </tr>
+                  @empty
+                    <tr>
+                      <td> 1</td>
+                      <td>    Dakota Rice </td>
+                      <td> Niger </td>
+                      <td> Oud-Turnhout </td>
+                      <td>  $36,738 </td>
+                    </tr>
+                  @endforelse
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
-      </div>
     </div>
   </div>
 @endsection

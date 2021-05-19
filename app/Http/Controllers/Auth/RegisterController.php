@@ -5,9 +5,12 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use App\User;
+use App\Student;
+use App\Teacher;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\Request;
 
 class RegisterController extends Controller
 {
@@ -39,6 +42,8 @@ class RegisterController extends Controller
     public function __construct()
     {
         $this->middleware('guest');
+        $this->middleware('guest:student');
+        $this->middleware('guest:teacher');
     }
 
     /**
@@ -72,4 +77,55 @@ class RegisterController extends Controller
         $user->assignRole('admin');
         return $user;
     }
+
+
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+    */
+    public function showStudentRegisterForm()
+    {
+        return view('auth.register', ['url' => 'student']);
+    }
+
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function showTeacherRegisterForm()
+    {
+        return view('auth.register', ['url' => 'teacher']);
+    }
+
+     /**
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    protected function createStudent(Request $request)
+    {
+        $this->validator($request->all())->validate();
+        Student::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+        ]);
+        return redirect()->intended('login/student');
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    protected function createTeacher(Request $request)
+    {
+        // return $request;
+        $this->validator($request->all())->validate();
+        Teacher::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+        ]);
+        return redirect()->intended('login/teacher');
+    }
+
 }

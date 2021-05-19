@@ -12,9 +12,15 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
   <!-- Material Kit CSS -->
   <link href="{{asset('assets/css/material-dashboard.css?v=2.1.0')}}" rel="stylesheet" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <style>
       .navbar-dark{
           background: #020120 !important;
+      }
+      .dropdown-menu .active{
+        color: #ffffff !important;
+        text-decoration: none;
+        background-color: #9d9fa1 !important;
       }
   </style>
   @yield('header')
@@ -30,7 +36,7 @@
         -->
       <div class="logo">
         <a href="{{url('/home')}}" class="simple-text logo-normal">
-          {{env('APP_NAME')}}
+          {{config('app.name')}}
         </a>
       </div>
       @include('backend.layout.sidebar')
@@ -40,7 +46,7 @@
       <nav class="navbar navbar-expand-lg navbar-dark   fixed-top" style="position: sticky; display: flex;">
         <div class="container-fluid">
             <div class="navbar-wrapper">
-              <a class="navbar-brand" href="javascript:void(0)">Dashboard<div class="ripple-container"></div></a>
+              <a class="navbar-brand" href="javascript:void(0)">{{$title ?? 'Page Title'}}<div class="ripple-container"></div></a>
             </div>
             <button class="navbar-toggler" type="button" data-toggle="collapse" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation" data-target="#navigation-example">
               <span class="">Toggle navigation</span>
@@ -90,14 +96,24 @@
                         Account
                         </p>
                         <div class="ripple-container"></div>
+                        @if(auth()->guard('web')->check())
+                          <span>{{auth()->guard('web')->user()->name}}</span>
+                        @endif
                     </a>
                     <div class="dropdown-menu dropdown-menu-right"  aria-labelledby="navbarDropdownMenuLink1">
-                        <a class="dropdown-item" href="javascript:void(0)">Dashbord</a>
-                        <a class="dropdown-item {{\Request::segment(2) == 'teacher' && \Request::segment(3) == 'create' ? 'active' : ''}}" href="{{route('teacher.index')}}">Add Teacher</a>
-                        <a class="dropdown-item {{\Request::segment(2) == 'teacher' && \Request::segment(3) != 'create' ? 'active' : ''}}" href="{{route('teacher.index')}}">All Teacher</a>
-                        <a class="dropdown-item {{\Request::segment(2) == 'student' && \Request::segment(3) == 'create' ? 'active' : ''}}" href="{{route('teacher.index')}}">Add Student</a>
-                        <a class="dropdown-item {{\Request::segment(2) == 'student' && \Request::segment(3) != 'create' ? 'active' : ''}}" href="{{route('teacher.index')}}">All Student</a>
-                        <a class="dropdown-item" href="javascript:void(0)">logout</a>
+                        <a class="dropdown-item " href="{{url('/home')}}">Dashbord</a>
+                        <a class="dropdown-item  {{\Request::segment(2) == 'teacher' && \Request::segment(3) == 'create' ? 'active' : ''}}" href="{{route('admin.teacher.create')}}">Add Teacher</a>
+                        <a class="dropdown-item  {{\Request::segment(2) == 'teacher' && \Request::segment(3) != 'create' ? 'active' : ''}}" href="{{route('admin.teacher.index')}}">All Teacher</a>
+                        <a class="dropdown-item  {{\Request::segment(2) == 'student' && \Request::segment(3) == 'create' ? 'active' : ''}}" href="{{route('admin.student.create')}}">Add Student</a>
+                        <a class="dropdown-item  {{\Request::segment(2) == 'student' && \Request::segment(3) != 'create' ? 'active' : ''}}" href="{{route('admin.student.index')}}">All Student</a>
+                        <a class="dropdown-item" href="{{ route('admin.logout') }}"
+                        onclick="event.preventDefault();
+                        document.getElementById('logout-form').submit();">
+                            {{ __('Logout') }}  
+                        </a>
+                        <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" class="d-none">
+                            @csrf
+                        </form>
                     </div>
                 </li>
               </ul>

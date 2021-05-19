@@ -5,7 +5,8 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
-
+use Illuminate\Http\Request;
+use Auth;
 class LoginController extends Controller
 {
     /*
@@ -36,5 +37,64 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+        $this->middleware('guest:student')->except('logout');
+        $this->middleware('guest:teacher')->except('logout');
+    }
+
+    public function showAdminLogin(){
+        return view('auth.login');
+    }
+
+    public function adminLogin(Request $request)
+    {
+        $this->validate($request, [
+            'email'   => 'required|email',
+            'password' => 'required|min:6'
+        ]);
+
+        if (Auth::guard('web')->attempt(['email' => $request->email, 'password' => $request->password], $request->get('remember'))) {
+
+            return redirect()->intended('/home');
+        }
+        return back()->withInput($request->only('email', 'remember'));
+    }
+
+    public function showStudentLoginForm()
+    {
+        return view('auth.login', ['url' => 'student']);
+    }
+
+    public function studentLogin(Request $request)
+    {
+        $this->validate($request, [
+            'email'   => 'required|email',
+            'password' => 'required|min:6'
+        ]);
+
+        if (Auth::guard('student')->attempt(['email' => $request->email, 'password' => $request->password], $request->get('remember'))) {
+
+            return redirect()->intended('/student');
+        }
+        return back()->withInput($request->only('email', 'remember'));
+    }
+
+     public function showTeacherLoginForm()
+    {
+        return view('auth.login', ['url' => 'teacher']);
+    }
+
+    public function teacherLogin(Request $request)
+    {
+        $this->validate($request, [
+            'email'   => 'required|email',
+            'password' => 'required|min:6'
+        ]);
+
+        if (Auth::guard('teacher')->attempt(['email' => $request->email, 'password' => $request->password], $request->get('remember'))) {
+
+            return redirect()->intended('/teacher');
+        }
+        return back()->withInput($request->only('email', 'remember'));
     }
 }
+    

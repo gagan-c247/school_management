@@ -13,125 +13,41 @@
           <div class="table-responsive">
             <table class="table table-hover">
               <thead class="">
-                <tr><th>
-                  ID
-                </th>
-                <th>
-                  Name
-                </th>
-                <th>
-                  Country
-                </th>
-                <th>
-                  City
-                </th>
-                <th>
-                  Salary
-                </th>
-              </tr></thead>
+                <tr>
+                  <th width="10%">ID </th>
+                  <th width="30%">Name</th>
+                  <th width="20%">Designation</th>
+                  <th width="30%">Created At</th>
+                  <th width="10%">Action</th>
+                </tr>
+              </thead>
               <tbody>
-                <tr>
-                  <td>
-                    1
-                  </td>
-                  <td>
-                    Dakota Rice
-                  </td>
-                  <td>
-                    Niger
-                  </td>
-                  <td>
-                    Oud-Turnhout
-                  </td>
-                  <td>
-                    $36,738
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    2
-                  </td>
-                  <td>
-                    Minerva Hooper
-                  </td>
-                  <td>
-                    Curaçao
-                  </td>
-                  <td>
-                    Sinaai-Waas
-                  </td>
-                  <td>
-                    $23,789
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    3
-                  </td>
-                  <td>
-                    Sage Rodriguez
-                  </td>
-                  <td>
-                    Netherlands
-                  </td>
-                  <td>
-                    Baileux
-                  </td>
-                  <td>
-                    $56,142
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    4
-                  </td>
-                  <td>
-                    Philip Chaney
-                  </td>
-                  <td>
-                    Korea, South
-                  </td>
-                  <td>
-                    Overland Park
-                  </td>
-                  <td>
-                    $38,735
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    5
-                  </td>
-                  <td>
-                    Doris Greene
-                  </td>
-                  <td>
-                    Malawi
-                  </td>
-                  <td>
-                    Feldkirchen in Kärnten
-                  </td>
-                  <td>
-                    $63,542
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    6
-                  </td>
-                  <td>
-                    Mason Porter
-                  </td>
-                  <td>
-                    Chile
-                  </td>
-                  <td>
-                    Gloucester
-                  </td>
-                  <td>
-                    $78,615
-                  </td>
-                </tr>
+                @forelse ($teachers as $teacher)
+                  <tr>
+                    <td> {{'#'.$teacher->id ?? ''}}</td>
+                    <td> 
+                      <div class="row">
+                        <div class="col-md-2">
+                          <img class="rounded-circle" src="{{'/storage/images/'.$teacher->file->filepath ?? ''}}" height="100%" width="55px" alt="">
+                        </div>
+                        <div class="col-md-10">
+                          <h6 class="mb-0 text-capitalize">{{$teacher->name ?? ''}}</h6>
+                          <p class="text-lowercase">{{$teacher->email ?? ''}}</p>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="text-capitalize">  {{$teacher->designation ?? ''}} </td>
+                    <td> {{$teacher->created_at->format('d M Y, H:i A') ?? ''}} </td>
+                    <td> 
+                      <a href="{{route('admin.teacher.edit',$teacher->id)}}"><i class="material-icons">edit</i></a>  
+                      <a href=""><i class="material-icons">delete</i></a>  
+                    </td>
+                  </tr>
+                @empty
+                    
+                @endforelse
+              
+                
               </tbody>
             </table>
           </div>
