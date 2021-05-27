@@ -24,11 +24,25 @@
                   @forelse ($students as $student)
                     <tr>
                       <td> {{'#'.$student->id ?? '-'}}</td>
-                      <td> {{$student->name ?? '-'}} </td>
+                      <td> 
+                        <a href="{{'admin.student.show',$student->id}}">
+                          <div class="row">
+                            <div class="col-md-2">
+                              <img class="rounded-circle" src="{{'/storage/images/'.$student->file->filepath ?? ''}}" height="100%" width="55px" alt="">
+                            </div>
+                            <div class="col-md-10">
+                              <h6 class="mb-0 text-capitalize">{{$student->name ?? ''}}</h6>
+                              <p class="text-lowercase">{{$student->email ?? ''}}</p>
+                            </div>
+                          </div>
+                        </a>
+                      </td>
                       <td> {{$student->studentclass->name ?? '-'}} </td>
                       <td> {{$student->created_at->format('d M Y, H:i A') ?? '-'}} </td>
                       <td>  
+                        @can('student-edit')
                           <a href="{{route('admin.student.edit',$student->id)}}"><i class="material-icons">edit</i></a>  
+                        @endcan  
                           <a href=""><i class="material-icons">delete</i></a>  
                       </td>
                     </tr>

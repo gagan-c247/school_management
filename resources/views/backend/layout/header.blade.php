@@ -49,7 +49,7 @@
               <a class="navbar-brand" href="javascript:void(0)">{{$title ?? 'Page Title'}}<div class="ripple-container"></div></a>
             </div>
             <button class="navbar-toggler" type="button" data-toggle="collapse" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation" data-target="#navigation-example">
-              <span class="">Toggle navigation</span>
+              <span class="d-none">Toggle navigation</span>
               <span class="navbar-toggler-icon icon-bar"></span>
               <span class="navbar-toggler-icon icon-bar"></span>
               <span class="navbar-toggler-icon icon-bar"></span>
@@ -102,10 +102,10 @@
                     </a>
                     <div class="dropdown-menu dropdown-menu-right"  aria-labelledby="navbarDropdownMenuLink1">
                         <a class="dropdown-item " href="{{url('/home')}}">Dashbord</a>
-                        <a class="dropdown-item  {{\Request::segment(2) == 'teacher' && \Request::segment(3) == 'create' ? 'active' : ''}}" href="{{route('admin.teacher.create')}}">Add Teacher</a>
-                        <a class="dropdown-item  {{\Request::segment(2) == 'teacher' && \Request::segment(3) != 'create' ? 'active' : ''}}" href="{{route('admin.teacher.index')}}">All Teacher</a>
-                        <a class="dropdown-item  {{\Request::segment(2) == 'student' && \Request::segment(3) == 'create' ? 'active' : ''}}" href="{{route('admin.student.create')}}">Add Student</a>
-                        <a class="dropdown-item  {{\Request::segment(2) == 'student' && \Request::segment(3) != 'create' ? 'active' : ''}}" href="{{route('admin.student.index')}}">All Student</a>
+                        @can('teacher-create')<a class="dropdown-item  {{\Request::segment(2) == 'teacher' && \Request::segment(3) == 'create' ? 'active' : ''}}" href="{{route('admin.teacher.create')}}">Add Teacher</a>@endcan
+                        @can('teacher-list')<a class="dropdown-item  {{\Request::segment(2) == 'teacher' && \Request::segment(3) != 'create' ? 'active' : ''}}" href="{{route('admin.teacher.index')}}">All Teacher</a>@endcan
+                        @can('student-create')<a class="dropdown-item  {{\Request::segment(2) == 'student' && \Request::segment(3) == 'create' ? 'active' : ''}}" href="{{route('admin.student.create')}}">Add Student</a>@endcan
+                        @can('student-list')<a class="dropdown-item  {{\Request::segment(2) == 'student' && \Request::segment(3) != 'create' ? 'active' : ''}}" href="{{route('admin.student.index')}}">All Student</a>@endcan
                         <a class="dropdown-item" href="{{ route('admin.logout') }}"
                         onclick="event.preventDefault();
                         document.getElementById('logout-form').submit();">

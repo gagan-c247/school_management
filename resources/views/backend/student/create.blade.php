@@ -73,7 +73,7 @@
         <div class="card">
           <div class="card-header card-header-primary">
             <h4 class="card-title">Add Student</h4>
-            <p class="card-category"> {{$student->name ?? 'Your'}} profile</p>
+            <p class="card-category"> {{$student->name ?? 'Student'}} profile</p>
           </div>
           <div class="card-body">
               <div class="row">
@@ -83,11 +83,16 @@
                     <select name="class_id" id="" class="form-control">
                         <option value="" class="bg bg-dark">Select Class</option>
                         @forelse ($courses as $course)
-                          <option value="{{$course->id}}" class="bg bg-dark">{{$course->name ?? ''}}</option>
+                          @if($course->type == 'Class')
+                            <option value="{{$course->id}}" class="bg bg-dark" {{$student->class_id == $course->id ? 'selected' : ''}}>{{$course->name ?? old('name')}}</option>
+                          @endif
                         @empty
                           <option value="" class="bg bg-dark">Data Not Found</option>
                         @endforelse
                     </select>
+                    @error('class_id')
+                      <div class="text-danger">{{ $message }}</div>
+                    @enderror
                   </div>
                 </div>
                 <div class="col-md-3">
@@ -99,7 +104,10 @@
                 <div class="col-md-4">
                   <div class="form-group bmd-form-group">
                     <label class="bmd-label-floating">Email address</label>
-                    <input type="email" name="email" class="form-control" value="{{$student->email ?? ''}}">
+                    <input type="email" name="email" class="form-control" value="{{$student->email ?? old('email')}}">
+                    @error('email')
+                      <div class="text-danger">{{ $message }}</div>
+                    @enderror
                   </div>
                 </div>
               </div>
@@ -107,46 +115,63 @@
                 <div class="col-md-6">
                   <div class="form-group bmd-form-group">
                     <label class="bmd-label-floating">Student Name</label>
-                    <input type="text" name="name" value="{{$student->name ?? ''}}" class="form-control">
+                    <input type="text" name="name" value="{{$student->name ?? old('name')}}" class="form-control">
+                      @error('name')
+                          <div class="text-danger">{{ $message }}</div>
+                      @enderror
                   </div>
                 </div>
                 <div class="col-md-6">
-                  <div class="form-group ">
+                  <div class="form-group">
                     <label class="">DOB</label>
-                    <input type="date" class="form-control" value="{{$student->dob ?? ''}}" name="dob">
+                    <input type="date" class="form-control" value="{{$student->dob ?? old('dob')}}" name="dob">
+                    @error('dob')
+                      <div class="text-danger">{{ $message }}</div>
+                    @enderror
                   </div>
                 </div>
                 <div class="col-md-6">
                   <div class="form-group bmd-form-group">
                     <label class="bmd-label-floating">Passward</label>
                     <input type="password" class="form-control" name="password">
+                    @error('password')
+                      <div class="text-danger">{{ $message }}</div>
+                    @enderror
                   </div>
                 </div>
                 <div class="col-md-6">
                   <div class="form-group bmd-form-group">
                     <label class="bmd-label-floating">Confirm Passward</label>
-                    <input type="password" class="form-control" name="confirmPassword">
+                    <input type="password" class="form-control" name="password_confirmation">
                   </div>
                 </div>
               </div>
-              
               <div class="row">
                 <div class="col-md-4">
                   <div class="form-group bmd-form-group">
                     <label class="bmd-label-floating">City</label>
-                    <input type="text" class="form-control" name="city" value="{{$student->city ?? ''}}">
+                    <input type="text" class="form-control" name="city" value="{{$student->city ?? old('city')}}">
+                    @error('city')
+                      <div class="text-danger">{{ $message }}</div>
+                    @enderror
                   </div>
                 </div>
                 <div class="col-md-4">
                   <div class="form-group bmd-form-group">
                     <label class="bmd-label-floating">Country</label>
-                    <input type="text" class="form-control" name="country" value="{{$student->country ?? ''}}">
+                    <input type="text" class="form-control" name="country" value="{{$student->country ?? old('country')}}">
+                    @error('country')
+                      <div class="text-danger">{{ $message }}</div>
+                    @enderror
                   </div>
                 </div>
                 <div class="col-md-4">
                   <div class="form-group bmd-form-group">
                     <label class="bmd-label-floating">Postal Code</label>
-                    <input type="text" class="form-control" name="pincode" value="{{$student->pincode ?? ''}}">
+                    <input type="text" class="form-control" name="pincode" value="{{$student->pincode ?? old('pincode')}}">
+                    @error('pincode')
+                      <div class="text-danger">{{ $message }}</div>
+                    @enderror
                   </div>
                 </div>
               </div>
@@ -154,7 +179,10 @@
                   <div class="col-md-6">
                     <div class="form-group bmd-form-group">
                       <label class="bmd-label-floating">Mobile Number</label>
-                      <input type="text" class="form-control" name="mobile" value="{{$student->mobile ?? ''}}">
+                      <input type="text" class="form-control" name="mobile" value="{{$student->mobile ?? old('mobile')}}">
+                      @error('mobile')
+                        <div class="text-danger">{{ $message }}</div>
+                      @enderror
                     </div>
                   </div>
                   <div class="col-md-6">
@@ -162,6 +190,9 @@
                       <label class="" style="padding-right:10px;">Status</label>
                       <input type="radio" class="" name="status" value="1" {{isset($student->status) && $student->status == '1' ? 'checked' : 'unchecked'}}><span style="padding-inline: 4px;, padding-inline-start: 2px;">Active</span> 
                       <input type="radio" class="" name="status" value="0" {{isset($student->status) && $student->status == '0' ? 'checked' : 'unchecked'}}> <span style="padding-inline: 4px;, padding-inline-start: 2px;"> Unactive</span>
+                      @error('status')
+                        <div class="text-danger">{{ $message }}</div>
+                      @enderror
                     </div>
                   </div>
               </div>
@@ -176,8 +207,10 @@
                       @empty
                           <option value="">data not found!!</option>
                       @endforelse
-                    
                     </select>
+                    @error('role')
+                      <div class="text-danger">{{ $message }}</div>
+                    @enderror
                   </div>
                 </div>
                 <div class="col-md-6">
@@ -194,12 +227,11 @@
                     <label>About Me</label>
                     <div class="form-group bmd-form-group">
                       <label class="bmd-label-floating"> Lamborghini Mercy, Your chick she so thirsty, I'm in that two seat Lambo.</label>
-                      <textarea class="form-control" rows="5" name="about">{{$student->about ?? ''}}</textarea>
+                      <textarea class="form-control" rows="5" name="about">{{$student->about ?? old('about')}}</textarea>
                     </div>
                   </div>
                 </div>
               </div>
-              <button type="submit" class="btn btn-primary pull-right">Update Profile</button>
               <div class="clearfix"></div>
           </div>
         </div>
@@ -223,7 +255,7 @@
                 </div>
                 <div class="p-image">
                   {{-- <i class="fa fa-camera upload-button"></i> --}}
-                  <input class="file-upload" name="profile" type="file" accept="image/*"/>
+                  <input class="file-upload" name="profile" value="{{old('profile')}}" type="file" accept="image/*"/>
                 </div>
           </div>
           <div class="card-body">
@@ -233,15 +265,14 @@
             <p class="card-description">
               
             </p>
-            {{-- <a href="#pablo" class="btn btn-primary btn-round">Follow</a> --}}
+            <button type="submit" class="btn btn-primary pull-center">Update Profile</button>
+            <div class="clearfix"></div>
           </div>
         </div>
       </div>
   </div>
-{{Form::close()}}
-{{-- </form> --}}
+  {{-- </form> --}}
 {{-- Student details END --}}
-
 {{-- Parents details Start --}}
 <div class="row">
   <div class="col-md-8">
@@ -251,18 +282,23 @@
         <p class="card-category">parents details</p>
       </div>
       <div class="card-body">
-        <form>
           <div class="row">
             <div class="col-md-6">
               <div class="form-group bmd-form-group">
                 <label class="bmd-label-floating">Father Name</label>
-                <input type="text" class="form-control">
+                <input type="text" class="form-control" name="father_name" value="{{$student->family->father_name ?? old('father_name')}}">
+                @error('father_name')
+                <div class="text-danger">{{ $message }}</div>
+                @enderror
               </div>
             </div>
             <div class="col-md-6">
               <div class="form-group bmd-form-group">
                 <label class="bmd-label-floating">Mother Name</label>
-                <input type="text" class="form-control">
+                <input type="text" class="form-control" name="mother_name" value="{{$student->family->mother_name ?? old('mother_name')}}">
+                @error('mother_name')
+                <div class="text-danger">{{ $message }}</div>
+                @enderror
               </div>
             </div>
           </div>
@@ -270,13 +306,19 @@
             <div class="col-md-6">
               <div class="form-group bmd-form-group">
                 <label class="bmd-label-floating">Father Mobile Number</label>
-                <input type="text" class="form-control">
+                <input type="text" class="form-control" name="f_mobile" value="{{$student->family->f_mobile ?? old('f_mobile')}}">
+                @error('f_mobile')
+                  <div class="text-danger">{{ $message }}</div>
+                @enderror
               </div>
             </div>
             <div class="col-md-6">
               <div class="form-group bmd-form-group">
                 <label class="bmd-label-floating">Mother Mobile Number</label>
-                <input type="text" class="form-control">
+                <input type="text" class="form-control" name="m_mobile" value="{{$student->family->m_mobile ?? old('m_mobile')}}">
+                @error('m_mobile')
+                  <div class="text-danger">{{ $message }}</div>
+                @enderror
               </div>
             </div>
           </div>
@@ -284,21 +326,30 @@
             <div class="col-md-6">
               <div class="form-group bmd-form-group">
                 <label class="bmd-label-floating">Father Email Address</label>
-                <input type="email" class="form-control">
+                <input type="email" class="form-control" name="f_email" value="{{$student->family->f_email ?? old('f_email')}}">
+                @error('f_email')
+                  <div class="text-danger">{{ $message }}</div>
+                @enderror
               </div>
             </div>
             <div class="col-md-6">
               <div class="form-group bmd-form-group">
                 <label class="bmd-label-floating">Mother Email Address</label>
-                <input type="text" class="form-control">
+                <input type="text" class="form-control" name="m_email" value="{{$student->family->m_email ?? old('m_email')}}">
+                @error('m_email')
+                  <div class="text-danger">{{ $message }}</div>
+                @enderror
               </div>
             </div>
           </div>
           <div class="row">
             <div class="col-md-12">
               <div class="form-group bmd-form-group">
-                <label class="bmd-label-floating">Adress</label>
-                <input type="text" class="form-control">
+                <label class="bmd-label-floating">Address</label>
+                <input type="text" class="form-control" name="parent_address" value="{{$student->family->address ?? old('parent_address')}}">
+                @error('parent_address')
+                  <div class="text-danger">{{ $message }}</div>
+                @enderror
               </div>
             </div>
           </div>
@@ -306,23 +357,31 @@
             <div class="col-md-4">
               <div class="form-group bmd-form-group">
                 <label class="bmd-label-floating">City</label>
-                <input type="text" class="form-control">
+                <input type="text" class="form-control" name="parent_city" value="{{$student->family->city ?? old('parent_city')}}">
+                @error('parent_city')
+                  <div class="text-danger">{{ $message }}</div>
+                @enderror
               </div>
             </div>
             <div class="col-md-4">
               <div class="form-group bmd-form-group">
                 <label class="bmd-label-floating">Country</label>
-                <input type="text" class="form-control">
+                <input type="text" class="form-control" name="parent_country" value="{{$student->family->country ?? old('parent_country')}}">
+                @error('parent_country')
+                  <div class="text-danger">{{ $message }}</div>
+                @enderror
               </div>
             </div>
             <div class="col-md-4">
               <div class="form-group bmd-form-group">
                 <label class="bmd-label-floating">Postal Code</label>
-                <input type="text" class="form-control">
+                <input type="text" class="form-control" name="parent_pincode" value="{{$student->family->pincode ?? old('parent_pincode')}}">
+                @error('parent_pincode')
+                  <div class="text-danger">{{ $message }}</div>
+                @enderror
               </div>
             </div>
-          </div>
-          <button type="submit" class="btn btn-primary pull-right">Update Profile</button> 
+          </div> 
           <div class="clearfix"></div>
         </form>
       </div>
@@ -335,18 +394,23 @@
         <p class="card-category">Guardian details (optional)</p>
       </div>
       <div class="card-body">
-        <form>
           <div class="row">
             <div class="col-md-6">
               <div class="form-group bmd-form-group">
                 <label class="bmd-label-floating">Guardian Name</label>
-                <input type="text" class="form-control">
+                <input type="text" class="form-control" name="g_name" value="{{$student->guardian->name ?? old('g_name')}}">
+                @error('g_name')
+                  <div class="text-danger">{{ $message }}</div>
+                @enderror
               </div>
             </div>
             <div class="col-md-6">
               <div class="form-group bmd-form-group">
                 <label class="bmd-label-floating">Relationship </label>
-                <input type="text" class="form-control">
+                <input type="text" class="form-control" name="g_relation" value="{{$student->guardian->relationship ?? old('g_relation')}}">
+                @error('g_relation')
+                <div class="text-danger">{{ $message }}</div>
+                @enderror
               </div>
             </div>
           </div>
@@ -354,13 +418,19 @@
             <div class="col-md-12">
               <div class="form-group bmd-form-group">
                 <label class="bmd-label-floating">Mobile Number</label>
-                <input type="text" class="form-control">
+                <input type="text" class="form-control" name="g_mobile" value="{{$student->guardian->mobile ?? old('g_mobile')}}">
+                @error('g_mobile')
+                  <div class="text-danger">{{ $message }}</div>
+                @enderror   
               </div>
             </div>
             <div class="col-md-12">
                 <div class="form-group bmd-form-group">
                   <label class="bmd-label-floating">Email Address</label>
-                  <input type="text" class="form-control">
+                  <input type="text" class="form-control" name="g_email" value="{{$student->guardian->email ?? old('g_email')}}">
+                  @error('g_email')
+                    <div class="text-danger">{{ $message }}</div>
+                  @enderror
                 </div>
             </div>
           </div>  
@@ -368,7 +438,10 @@
             <div class="col-md-12">
               <div class="form-group bmd-form-group">
                 <label class="bmd-label-floating">Adress</label>
-                <input type="text" class="form-control">
+                <input type="text" class="form-control" name='g_address' value="{{$student->guardian->address ?? old('g_address')}}">
+                @error('g_address')
+                  <div class="text-danger">{{ $message }}</div>
+                @enderror
               </div>
             </div>
           </div>
@@ -376,19 +449,28 @@
             <div class="col-md-4">
               <div class="form-group bmd-form-group">
                 <label class="bmd-label-floating">City</label>
-                <input type="text" class="form-control">
+                <input type="text" class="form-control" name="g_city" value="{{$student->guardian->city ?? old('g_city')}}">
+                @error('g_city')
+                  <div class="text-danger">{{ $message }}</div>
+                @enderror
               </div>
             </div>
             <div class="col-md-4">
               <div class="form-group bmd-form-group">
                 <label class="bmd-label-floating">Country</label>
-                <input type="text" class="form-control">
+                <input type="text" class="form-control" name="g_country" value="{{$student->guardian->country ?? old('g_country')}}">
+                @error('g_country')
+                <div class="text-danger">{{ $message }}</div> 
+                @enderror
               </div>
             </div>
             <div class="col-md-4">
               <div class="form-group bmd-form-group">
                 <label class="bmd-label-floating">Postal Code</label>
-                <input type="text" class="form-control">
+                <input type="text" class="form-control" name="g_pincode" value="{{$student->guardian->pincode ?? old('g_pincode')}}">
+                @error('g_pincode')
+                  <div class="text-danger">{{ $message }}</div>
+                @enderror
               </div>
             </div>
           </div>
@@ -400,6 +482,7 @@
   </div>
 </div>
 {{-- Parents details finish --}}
+{{Form::close()}}
 @endsection
 @section('footer')
 <script>
@@ -423,5 +506,6 @@
     $(".file-upload").click();
     });
   });
+
 </script>
 @endsection

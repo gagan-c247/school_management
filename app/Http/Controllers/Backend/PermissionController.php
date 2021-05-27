@@ -39,6 +39,7 @@ class PermissionController extends Controller
     {
         // return $request;
         Permission::create(['name'=>$request['name'],'guard_name'=>$request['type']]);
+        session()->flash('success','Inserted Successfully!');
         return redirect()->back();
 
     }
@@ -62,7 +63,10 @@ class PermissionController extends Controller
      */
     public function edit($id)
     {
-        return  $id;
+        // return  $id;
+        $permission = Permission::find($id);
+        $permissions= Permission::get();
+        return view('backend.permission.index',compact('permission','permissions'));
     }
 
     /**
@@ -74,7 +78,10 @@ class PermissionController extends Controller
      */
     public function update(RoleRequest $request, $id)
     {
-        //
+        // return $request->all();
+        Permission::where('id',$id)->update(['name'=>$request->name,'guard_name'=>$request->type]);
+        session()->flash('success','Permission Updated Successfully!!');
+        return redirect()->route('admin.permission.edit',$id);
     }
 
     /**

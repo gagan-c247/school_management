@@ -11,6 +11,14 @@ use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 class TeacherController extends Controller
 {
+    public function __construct(){
+        $this->middleware('permission:teacher-section');
+        $this->middleware('permission:teacher-list',['only'=>['index']]);
+        $this->middleware('permission:teacher-create',['only'=>['create','store']]);
+        $this->middleware('permission:teacher-edit',['only'=>['update','edit']]);
+        $this->middleware('permission:teacher-view',['only'=>['show']]);
+        $this->middleware('permission:teacher-delete',['only'=>['destroy']]);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -56,8 +64,9 @@ class TeacherController extends Controller
             return redirect()->back()->withInput();
         }
         $teacher = Teacher::create($request->except(['_token','profile','aboutme']));
+        session()->flash('success','Teacher Created Successfully!!');
         // $teacher->assignRole('teacher');
-        return redirect()->route('teacher.edit',$teacher->id); 
+        return redirect()->route('admin.teacher.edit',$teacher->id); 
 
 
     }
@@ -126,7 +135,8 @@ class TeacherController extends Controller
             $request['file_id'] = $upload->id;
         }  
         $teacher = Teacher::where('id',$id)->update($request->except(['_token','_method','profile','aboutme','confirmPassword']));
-        return redirect()->route('teacher.edit',$id); 
+        session()->flash('success','Teacher Updated Successfully!!');
+        return redirect()->route('admin.teacher.edit',$id); 
     }
 
     /**

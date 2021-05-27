@@ -4,7 +4,11 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
+use App\Http\Requests\UserRequest;
 use App\User;
+
 class UserController extends Controller
 {
     /**
@@ -25,7 +29,8 @@ class UserController extends Controller
      */
     public function create(User $user)
     {
-        return view('backend.user.create')->with('user',$user);
+        $roles = Role::where('guard_name','web')->pluck('name','name')->all();
+        return view('backend.user.create',compact('roles'))->with('user',$user);
     }
 
     /**
@@ -34,12 +39,24 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(UserRequest $request)
     {
         // return $request->all();
-        $request['password'] = Hash::make($request->password);
-        User::create($request->except(['_token']));
-
+        if($request->password != '' && $request->password_confirmation){
+            if($request->password == $request->password_confirmation){
+                $request['password'] = Hash::make($request->password);
+            }else{
+                session()->flash('danger','password doesn\'t match');
+                return redirect()->back()->withInput();
+            }
+        }else{
+            session()->flash('danger','password should not be empty');
+            return redirect()->back()->withInput();
+        }
+        
+        $user = User::create($request->except(['_token','role']));
+        $user->assignRole($request->role);
+        session()->flash('success','Inserted Successfully!');   
         return redirect()->back();
     }
 
@@ -62,7 +79,10 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        //
+        $user = User::find($id);
+        $roles = Role::where('guard_name','web')->pluck('name','name')->all();
+        $userRole = $user->roles->where('guard_name','web')->pluck('name','name')->first();
+        return view('backend.user.create',compact('user','roles','userRole'));
     }
 
     /**
@@ -74,7 +94,22 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        if($request->password != ''){
+            if($request->password == $request->password_confirmation){
+                $request['password'] = Hash::make($request->password);
+            }else{
+                session()->flash('danger','password doesn\'t match');
+                return redirect()->back()->withInput();
+            }
+        }
+        User::create($request->except(['_token','method','role']));
+        if($request->role != ''){
+            $user = User::find($id);
+            $user->assignRole($request->role);
+        }
+
+        session()->flash('success','Updated Successfully!');
+        return redirect()->back();
     }
 
     /**
@@ -85,6 +120,11 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $user = User::find($id);
+        if($user != '' && $user->id != '1'){
+            $user->delete();  
+            return response()->json(['status'=>'success', 'message'=>'Data Successfully Deleted']);
+        }
+        return response()->json(['status'=>'failed', 'message'=>'data not found or already deleted!!']);
     }
 }

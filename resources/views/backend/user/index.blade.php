@@ -36,11 +36,17 @@
                         </div>
                       </div>
                     </td>
-                    <td class="text-capitalize">  {{--$teacher->designation ?? ''--}} </td>
+                    <td class="text-capitalize">  
+                      @if($user->hasRole('admin'))  
+                        Administrator
+                      @elseif($user->hasRole('teacher'))
+                        Teacher Administrator
+                      @endif
+                    </td>
                     <td> {{$user->created_at->format('d M Y, H:i A') ?? ''}} </td>
                     <td> 
                       <a href="{{route('admin.user.edit',$user->id)}}"><i class="material-icons">edit</i></a>  
-                      <a href=""><i class="material-icons">delete</i></a>  
+                      <a href="#" data-id="{{$user->id}}" class="delete"><i class="material-icons">delete</i></a>  
                     </td>
                   </tr>
                 @empty
@@ -55,4 +61,35 @@
       </div>
     </div>
   </div>
+@endsection
+@section('footer')
+  <script>
+    $(document).on('click','.delete',function(){
+      var id = $(this).data('id');
+      var dataHtml = $(this).closest('tr');
+      var confirem = confirm("Are You sure? You want to delete");
+      if(confirem){
+        $.ajaxSetup({
+          headers: {
+              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          }
+        });
+        $.ajax({
+        url : '/home/user/'+id,
+        method: 'delete',
+        data: {
+            "_token": "{{ csrf_token() }}",
+            "id": id
+            },
+        success:function(data){
+            // console.log(data.status == 'success');
+          if(data.status == 'success'){
+            dataHtml.remove();
+          }
+        }
+      });
+
+      }
+    });
+  </script>
 @endsection

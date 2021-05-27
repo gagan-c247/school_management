@@ -14,9 +14,10 @@ class AddUserIdToStudentsTable extends Migration
     public function up()
     {
         Schema::table('students', function (Blueprint $table) {
-            $table->unsignedBigInteger('user_id')->nullable();
-            $table->foreign('user_id')->references('id')->on('users')->after('id')->onDelete('cascade');
-        });           
+            $table->unsignedBigInteger('user_id')->nullable()->after('class_id');
+            $table->string('slug')->nullable()->after('name');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+        });
     }
 
     /**
@@ -29,6 +30,8 @@ class AddUserIdToStudentsTable extends Migration
         Schema::table('students', function (Blueprint $table) {
             $table->dropForeign(['user_id']);
             $table->dropColumn('user_id');
+            $table->dropColumn('slug');
+
         });
     }
 }

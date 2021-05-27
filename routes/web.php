@@ -67,11 +67,18 @@ Route::middleware('auth:web')->name('admin.')->group(function () {
     Route::get('/home', 'HomeController@index')->name('home');
     Route::resource('/home/user','Backend\UserController');
     Route::resource('/home/student','Backend\StudentController');
+    Route::get('/home/student/family/{id}','Backend\StudentController@showFamily')->name('family');
+    Route::get('/home/student/guardian/{id}','Backend\StudentController@showGuardian')->name('guardian');
     Route::resource('/home/teacher','Backend\TeacherController');
     Route::resource('/home/course','Backend\CourseController');
     Route::resource('/home/role','Backend\RoleController');
     Route::resource('/home/permission','Backend\PermissionController');
     Route::post('/home/role/permissionSearch','Backend\RoleController@permissionSearch')->name('permissionSearch');
+
+    Route::resource('/home/fileupload','Backend\FileUploadController');
+    Route::get('/home/fileupload/delete/{id}','Backend\FileUploadController@delete')->name('delete');
+
+    Route::resource('/home/posts','Backend\PostController');
 });
 //=================================================
 /****************END Routes For Admin************/

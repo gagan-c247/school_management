@@ -13,6 +13,7 @@ class RoleController extends Controller
     public function __construct(Role $role)
     {
         $this->role = $role;
+        $this->middleware('permission:role-permission');
     }
 
     /**
@@ -45,12 +46,12 @@ class RoleController extends Controller
      */
     public function store(RoleRequest $request)
     {
-         return $request->all();
+        //  return $request->all();
         $role = Role::create(['guard_name'=>$request['type'],'name'=>$request['name']]);
-       return $role->syncPermissions($request->input('permission'));
+        $role->syncPermissions($request->input('permission'));
+        session()->flash('success','Inserted Successfully!');
         return redirect()->back();
     }
-
     /**
      * Display the specified resource.
      *
@@ -81,7 +82,6 @@ class RoleController extends Controller
 
         return view('backend.role.index',compact('role','roles','permissions','rolePermissions'));
     }
-
     /**
      * Update the specified resource in storage.
      *
@@ -97,11 +97,12 @@ class RoleController extends Controller
             $role->name = $request->input('name');
             $role->save();
         } 
-        if($request->input('permission') != ''){
+        
+        // if($request->input('permission') != ''){
             DB::table('role_has_permissions')->where('role_id',$id)->delete();
             $role->givePermissionTo($request->input('permission'));
-        }
-        
+        // }
+        session()->flash('success','Updated Successfully!');
         return redirect()->back();
     }
 
@@ -116,18 +117,14 @@ class RoleController extends Controller
         //
     }
     public function permissionSearch(Request $request){
-         
         if($request->ajax()){
             // return $request->type;
-        $permissions = Permission::where('guard_name',$request->type)->get();
-        $output ='';
-        foreach($permissions as $permission){
-           
-            $output .= '<input type="checkbox" name="permission[]" value="'.$permission->name.'" class="">'.$permission->name.'<br>';
-           
-
-        }
-        return response()->json(['permissions'=>$output,'status'=>'success']);
+            $permissions = Permission::where('guard_name',$request->type)->get();
+            $output ='';
+            foreach($permissions as $permission){   
+                $output .= '<input type="checkbox" name="permission[]" value="'.$permission->name.'" class="">'.$permission->name.'<br>';
+            }
+            return response()->json(['permissions'=>$output,'status'=>'success']);
         }
     }
 }

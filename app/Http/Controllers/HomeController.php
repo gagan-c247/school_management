@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use App\Student;
+use App\Teacher;
 class HomeController extends Controller
 {
     /**
@@ -23,6 +24,10 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $studentCount = Student::count();
+        $latestStudent = Student::with('studentclass')->take(5)->latest()->get();
+        $teacherCount = Teacher::count();
+        $latestTeacher = Teacher::take(5)->latest()->get();
+        return view('home',compact('studentCount','latestStudent','teacherCount','latestTeacher'));
     }
 }
