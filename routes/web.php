@@ -79,6 +79,8 @@ Route::middleware('auth:web')->name('admin.')->group(function () {
     Route::get('/home/fileupload/delete/{id}','Backend\FileUploadController@delete')->name('delete');
 
     Route::resource('/home/posts','Backend\PostController');
+
+    Route::resource('/home/quiz','Backend\QuizDemoController');
 });
 //=================================================
 /****************END Routes For Admin************/

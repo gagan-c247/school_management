@@ -75,7 +75,7 @@ class CourseController extends Controller
     public function edit($id)
     {
         $course = Course::find($id);
-        $courses = Course::get();
+        $courses = Course::paginate(10);
         return view('backend.settings.index',compact('course','courses'));
     }
 

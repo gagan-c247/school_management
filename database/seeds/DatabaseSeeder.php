@@ -43,15 +43,26 @@ class DatabaseSeeder extends Seeder
         /******Create Permission & Roles***********/
         /*************and ASSIGN ROLES************/
         Permission::create(['name' => 'student-create', 'guard_name' => 'web']);
-        Permission::create(['name' => 'student-store', 'guard_name' => 'web']);
-        Permission::create(['name' => 'student-update', 'guard_name' => 'web']);
+        Permission::create(['name' => 'student-list', 'guard_name' => 'web']);
+        Permission::create(['name' => 'student-section', 'guard_name' => 'web']);
         Permission::create(['name' => 'student-edit', 'guard_name' => 'web']);
-        Permission::create(['name' => 'student-delete', 'guard_name' => 'web']);
-        Permission::create(['name' => 'student-show', 'guard_name' => 'web']);
+        Permission::create(['name' => 'student-destroy', 'guard_name' => 'web']);
+        Permission::create(['name' => 'student-view', 'guard_name' => 'web']);
         Permission::create(['name' => 'role-permission', 'guard_name' => 'web']);
         Permission::create(['name' => 'user-create', 'guard_name' => 'web']);
         Permission::create(['name' => 'user-all', 'guard_name' => 'web']);
-
+        Permission::create(['name' => 'teacher-section', 'guard_name' => 'web']);
+        Permission::create(['name' => 'teacher-list', 'guard_name' => 'web']);
+        Permission::create(['name' => 'teacher-create', 'guard_name' => 'web']);
+        Permission::create(['name' => 'teacher-edit', 'guard_name' => 'web']);
+        Permission::create(['name' => 'teacher-destroy', 'guard_name' => 'web']);
+        Permission::create(['name' => 'course-create', 'guard_name' => 'web']);
+        Permission::create(['name' => 'course-edit', 'guard_name' => 'web']);
+        Permission::create(['name' => 'course-section', 'guard_name' => 'web']);
+        Permission::create(['name' => 'course-destroy', 'guard_name' => 'web']);
+        Permission::create(['name' => 'course-list', 'guard_name' => 'web']);
+        
+        
         //create roles and assign existing permissions
         $role = Role::create(['name' => 'admin', 'guard_name' => 'web']);
         $role->givePermissionTo(Permission::all());
