@@ -81,7 +81,15 @@ Route::middleware('auth:web')->name('admin.')->group(function () {
     Route::resource('/home/posts','Backend\PostController');
 
     Route::resource('/home/quiz','Backend\QuizDemoController');
+    
+    Route::get('videoclip','Backend\VideoClipController@index');
+    Route::get('videoclip/makeimage','Backend\VideoClipController@makeimage')->name('makeimage');
+    Route::get('videoclip/makeVideo','Backend\VideoClipController@makeVideo')->name('makeVideo');
+    Route::get('videoclip/joinTwoVideo','Backend\VideoClipController@joinTwoVideo')->name('joinTwoVideo');
 });
 //=================================================
 /****************END Routes For Admin************/
 //=================================================
+
+
+Route::resource('/collect','Learning\CollectionController');

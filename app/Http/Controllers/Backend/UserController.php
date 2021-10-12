@@ -18,7 +18,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users =User::get();
+        return  $users =User::get();
         return view('backend.user.index',compact('users'));
     }
 

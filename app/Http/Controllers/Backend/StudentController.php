@@ -36,7 +36,7 @@ class StudentController extends Controller
     public function index()
     {
         // dd(config('app')); 
-        $students = $this->student->orderby('id','desc')->with('studentclass','file')->get();
+      return   $students = $this->student->orderby('id','desc')->with('studentclass','file')->get();
         return view('backend.student.index',compact('students'));
     }
 
